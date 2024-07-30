@@ -7,11 +7,12 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0;
+            padding: 0;
             background-color: #f4f4f4;
         }
         .container {
-            max-width: 600px;
+            max-width: 800px;
             margin: auto;
             padding: 20px;
             background: #fff;
@@ -63,69 +64,86 @@
         .hidden {
             display: none;
         }
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            padding: 10px;
+            background: #fff;
+            border-top: 1px solid #ddd;
+        }
+        #weather-info {
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>예약 및 결제</h1>
 
-        <!-- 예약 폼 -->
-        <div id="reservation-section">
-            <h2>예약하기</h2>
-            <form id="reservation-form">
-                <div class="form-group">
-                    <label for="name">이름:</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">이메일:</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="date">예약 날짜:</label>
-                    <input type="date" id="date" name="date" required>
-                </div>
-                <div class="form-group">
-                    <label for="people">인원 수:</label>
-                    <input type="number" id="people" name="people" min="1" required>
-                </div>
-                <div class="form-group">
-                    <label for="bbq">바베큐 옵션:</label>
-                    <select id="bbq" name="bbq">
-                        <option value="none">없음</option>
-                        <option value="standard">기본</option>
-                        <option value="deluxe">디럭스</option>
-                    </select>
-                </div>
-                <button type="submit">다음 단계: 결제하기</button>
-            </form>
-        </div>
+        <!-- 예약 및 결제 폼 -->
+        <div id="reservation-payment-section">
+            <div id="reservation-section">
+                <h2>예약하기</h2>
+                <form id="reservation-form">
+                    <div class="form-group">
+                        <label for="name">이름:</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">이메일:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">예약 날짜:</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="people">인원 수:</label>
+                        <input type="number" id="people" name="people" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bbq">바베큐 옵션:</label>
+                        <select id="bbq" name="bbq">
+                            <option value="none">없음</option>
+                            <option value="standard">기본</option>
+                            <option value="deluxe">디럭스</option>
+                        </select>
+                    </div>
+                    <button type="submit">다음 단계: 결제하기</button>
+                </form>
+            </div>
 
-        <!-- 결제 폼 -->
-        <div id="payment-section" class="hidden">
-            <h2>결제하기</h2>
-            <form id="payment-form">
-                <div class="form-group">
-                    <label for="card-number">카드 번호:</label>
-                    <input type="text" id="card-number" name="card-number" required>
-                </div>
-                <div class="form-group">
-                    <label for="card-expiry">유효 기간:</label>
-                    <input type="text" id="card-expiry" name="card-expiry" required>
-                </div>
-                <div class="form-group">
-                    <label for="card-cvc">CVC:</label>
-                    <input type="text" id="card-cvc" name="card-cvc" required>
-                </div>
-                <button type="submit">결제하기</button>
-            </form>
-        </div>
+            <div id="payment-section" class="hidden">
+                <h2>결제하기</h2>
+                <form id="payment-form">
+                    <div class="form-group">
+                        <label for="card-number">카드 번호:</label>
+                        <input type="text" id="card-number" name="card-number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="card-expiry">유효 기간:</label>
+                        <input type="text" id="card-expiry" name="card-expiry" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="card-cvc">CVC:</label>
+                        <input type="text" id="card-cvc" name="card-cvc" required>
+                    </div>
+                    <button type="submit">결제하기</button>
+                </form>
+            </div>
 
-        <!-- 결과 메시지 -->
-        <div id="response-message" class="response-message"></div>
+            <!-- 결과 메시지 -->
+            <div id="response-message" class="response-message"></div>
+        </div>
     </div>
 
+    <footer>
+        <h2>날씨 정보</h2>
+        <div id="weather-info">날씨 정보를 로딩 중입니다...</div>
+    </footer>
+
     <script>
+        // 예약 폼 제출 이벤트
         document.getElementById('reservation-form').addEventListener('submit', function(event) {
             event.preventDefault(); // 폼 제출을 막습니다.
 
@@ -177,6 +195,7 @@
             xhr.send(JSON.stringify(reservationData));
         });
 
+        // 결제 폼 제출 이벤트
         document.getElementById('payment-form').addEventListener('submit', function(event) {
             event.preventDefault(); // 폼 제출을 막습니다.
 
@@ -205,12 +224,6 @@
                         responseMessage.textContent = '결제가 성공적으로 완료되었습니다!';
                         responseMessage.className = 'response-message success';
 
-                        // 예약 완료 메시지 추가
-                        const reservationMessage = document.createElement('p');
-                        reservationMessage.textContent = '예약이 성공적으로 완료되었습니다!';
-                        reservationMessage.className = 'response-message success';
-                        responseMessage.appendChild(reservationMessage);
-
                         // 결제 및 예약 섹션 숨기기
                         document.getElementById('payment-section').classList.add('hidden');
                         document.getElementById('reservation-section').classList.add('hidden');
@@ -231,6 +244,57 @@
             };
 
             xhr.send(JSON.stringify(paymentData));
+        });
+
+        // 날씨 정보 자동 조회
+        document.addEventListener('DOMContentLoaded', function() {
+            // 날씨 API 키를 입력하세요
+            const weatherApiKey = '88197f107ea2c1b847d350fedaab4808'; 
+            const weatherInfoElement = document.getElementById('weather-info');
+
+            // 사용자 위치 정보 가져오기
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    // 날씨 API 요청 URL
+                    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${weatherApiKey}&units=metric`;
+
+                    // AJAX 요청
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('GET', weatherUrl, true);
+
+                    xhr.onload = function() {
+                        if (xhr.status >= 200 && xhr.status < 300) {
+                            const response = JSON.parse(xhr.responseText);
+                            if (response.weather && response.weather.length > 0) {
+                                weatherInfoElement.innerHTML = `
+                                    <p><strong>도시:</strong> ${response.name}</p>
+                                    <p><strong>날씨:</strong> ${response.weather[0].description}</p>
+                                    <p><strong>온도:</strong> ${response.main.temp} °C</p>
+                                    <p><strong>습도:</strong> ${response.main.humidity} %</p>
+                                    <p><strong>풍속:</strong> ${response.wind.speed} m/s</p>
+                                `;
+                            } else {
+                                weatherInfoElement.textContent = '날씨 정보를 가져올 수 없습니다.';
+                            }
+                        } else {
+                            weatherInfoElement.textContent = '날씨 정보 요청 중 오류가 발생했습니다.';
+                        }
+                    };
+
+                    xhr.onerror = function() {
+                        weatherInfoElement.textContent = '날씨 정보 요청에 실패했습니다.';
+                    };
+
+                    xhr.send();
+                }, function(error) {
+                    weatherInfoElement.textContent = '위치 정보를 가져올 수 없습니다.';
+                });
+            } else {
+                weatherInfoElement.textContent = 'Geolocation을 지원하지 않는 브라우저입니다.';
+            }
         });
     </script>
 </body>

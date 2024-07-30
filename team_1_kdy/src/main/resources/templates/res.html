@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>예약 및 바베큐 옵션 선택</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="date"], input[type="email"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .response-message {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>예약 및 바베큐 옵션 선택</h1>
+        <form id="reservation">
+            <div class="form-group">
+                <label for="name">이름:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">이메일:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="date">예약 날짜:</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+            <div class="form-group">
+                <label for="time">예약 시간:</label>
+                <input type="text" id="time" name="time" placeholder="HH:MM" required>
+            </div>
+            <div class="form-group">
+                <label for="guests">인원 수:</label>
+                <select id="guests" name="guests">
+                    <option value="1">1명</option>
+                    <option value="2">2명</option>
+                    <option value="3">3명</option>
+                    <option value="4">4명</option>
+                    <option value="5">5명</option>
+                    <option value="6">6명</option>
+                    <option value="7">7명</option>
+                    <option value="8">8명</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="bbq">바베큐 옵션:</label>
+                <select id="bbq" name="bbq">
+                    <option value="none">없음</option>
+                    <option value="basic">기본 바베큐</option>
+                    <option value="deluxe">디럭스 바베큐</option>
+                </select>
+            </div>
+            <button type="submit">예약하기</button>
+        </form>
+
+        <div id="response-message" class="response-message"></div>
+    </div>
+
+    <script>
+        document.getElementById('reservation').addEventListener('submit', function(event) {
+            event.preventDefault(); // 폼 제출을 막습니다.
+
+            // 입력 필드에서 값 가져오기
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+            const guests = document.getElementById('guests').value;
+            const bbq = document.getElementById('bbq').value;
+
+            // 예약 정보 객체 생성
+            const reservationData = {
+                name: name,
+                email: email,
+                date: date,
+                time: time,
+                guests: guests,
+                bbq: bbq
+            };
+
+            // 서버에 예약 정보 전송
+            fetch('/res', {
+                method: 'get',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(reservationData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('예약 처리에 실패했습니다.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // 서버 응답에 따른 메시지 표시
+                const responseMessage = document.getElementById('response-message');
+                if (data.success) {
+                    responseMessage.textContent = '예약이 성공적으로 완료되었습니다!';
+                    responseMessage.className = 'response-message success';
+                } else {
+                    responseMessage.textContent = '예약 처리에 실패했습니다. 다시 시도해 주세요.';
+                    responseMessage.className = 'response-message error';
+                }
+            })
+            .catch(error => {
+                const responseMessage = document.getElementById('response-message');
+                responseMessage.textContent = '예약 처리 중 오류가 발생했습니다: ' + error.message;
+                responseMessage.className = 'response-message error';
+            });
+        });
+    </script>
+</body>
+</html>

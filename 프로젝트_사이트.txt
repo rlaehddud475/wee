@@ -13,3 +13,29 @@ https://sedangdang.tistory.com/280
 https://okbear3.tistory.com/entry/Spring%EC%97%90%EC%84%9C-%EA%B8%B0%EC%83%81%EC%B2%AD-API-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0
 https://blog.naver.com/javaking75/220108463945 ★★★★★
 https://dev-jsk.tistory.com/129
+
+
+
+88197f107ea2c1b847d350fedaab4808
+
+ <div class="form-group">
+                <label for="guests">인원 수:</label>
+                <select id="guests" name="guests">
+                    <option value="1">1명</option>
+                    <option value="2">2명</option>
+                    <option value="3">3명</option>
+                    <option value="4">4명</option>
+                    <option value="5">5명</option>
+                    <option value="6">6명</option>
+                    <option value="7">7명</option>
+                    <option value="8">8명</option>
+                </select>
+            </div>
+ <div class="form-group">
+                <label for="bbq">바베큐 옵션:</label>
+                <select id="bbq" name="bbq">
+                    <option value="none">없음</option>
+                    <option value="basic">기본 바베큐</option>
+                    <option value="deluxe">디럭스 바베큐</option>
+                </select>
+            </div>

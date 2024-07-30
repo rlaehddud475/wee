@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class AdminVO {
+	private int cus_idx;
 	private String admin_Id;
 	private String Password;
-	 private String CustomerId;
 }

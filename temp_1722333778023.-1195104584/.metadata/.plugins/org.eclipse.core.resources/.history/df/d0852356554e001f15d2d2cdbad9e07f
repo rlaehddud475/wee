@@ -1,0 +1,38 @@
+package com.korea.test.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import ch.qos.logback.core.model.Model;
+import lombok.RequiredArgsConstructor;
+
+@Controller
+@RequiredArgsConstructor
+public class reservationController {
+	@GetMapping("/main")
+	public String mian(Model model) {	
+		return "main";
+	}
+	
+	@GetMapping("/reservation_form")
+	public String reservation(Model model) {	
+		return "reservation_form";
+	}
+	
+	@GetMapping("/reservation_insert")
+	public String getMethodName(Model model) {
+		return "reservation_insert";
+	}
+	
+    @PostMapping("/reservation_insert")
+    @RequestBody
+    public String saveDate(@RequestBody String date) {
+        // 받은 날짜를 처리하는 로직을 여기에 추가합니다.
+    	
+        System.out.println("Received date: " + date);
+        return "Date received successfully!";
+    }
+
+}

@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.korea.board.mapper.BoardMapper">
-
+<mapper namespace="com.korea.team_1_kdy.mapper.ReservationMapper">
+<select id="mypage">
+select * from customer where idx=#{idx}
+</select>
+<insert id="reservation">
+	insert into Reservation values(
+	#{ReservationNumber},
+	#{CustomerId},
+	#{Price},
+	#{ReservationDate}
+	)
+</insert>
 </mapper>

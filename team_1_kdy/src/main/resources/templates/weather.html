@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>날씨 정보 조회</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .weather-info {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>날씨 정보 조회</h1>
+        <div class="form-group">
+            <label for="city">도시:</label>
+            <input type="text" id="city" name="city" placeholder="도시 이름을 입력하세요" required>
+        </div>
+        <button id="get-weather">날씨 조회하기</button>
+
+        <div id="weather-info" class="weather-info"></div>
+    </div>
+
+    <script>
+        document.getElementById('get-weather').addEventListener('click', function() {
+            const city = document.getElementById('city').value;
+            const apiKey = '88197f107ea2c1b847d350fedaab4808'; // OpenWeatherMap API 키를 여기에 입력하세요.
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', apiUrl, true);
+
+            xhr.onload = function() {
+                const weatherInfo = document.getElementById('weather-info');
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    const data = JSON.parse(xhr.responseText);
+                    if (data.cod === 200) {
+                        weatherInfo.innerHTML = `
+                            <h2>${data.name}</h2>
+                            <p>날씨: ${data.weather[0].description}</p>
+                            <p>온도: ${data.main.temp}°C</p>
+                            <p>습도: ${data.main.humidity}%</p>
+                            <p>풍속: ${data.wind.speed} m/s</p>
+                        `;
+                        weatherInfo.className = 'weather-info success';
+                    } else {
+                        weatherInfo.innerHTML = `<p class="error">날씨 정보를 찾을 수 없습니다.</p>`;
+                        weatherInfo.className = 'weather-info error';
+                    }
+                } else {
+                    weatherInfo.innerHTML = `<p class="error">날씨 정보를 가져오는 데 실패했습니다.</p>`;
+                    weatherInfo.className = 'weather-info error';
+                }
+            };
+
+            xhr.onerror = function() {
+                const weatherInfo = document.getElementById('weather-info');
+                weatherInfo.innerHTML = `<p class="error">네트워크 오류가 발생했습니다.</p>`;
+                weatherInfo.className = 'weather-info error';
+            };
+
+            xhr.send();
+        });
+    </script>
+</body>
+</html>

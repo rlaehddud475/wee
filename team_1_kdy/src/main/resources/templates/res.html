@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>예약 및 바베큐 옵션 선택</title>
+    <title>예약 및 결제</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,7 +29,7 @@
             display: block;
             margin-bottom: 5px;
         }
-        input[type="text"], input[type="date"], input[type="email"], select {
+        input[type="text"], input[type="date"], input[type="number"], input[type="email"], select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
@@ -60,65 +60,80 @@
         .success {
             color: green;
         }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>예약 및 바베큐 옵션 선택</h1>
-        <form id="reservation">
-            <div class="form-group">
-                <label for="name">이름:</label>
-                <input type="text" id="name" name="name" required>
-            </div>
-            <div class="form-group">
-                <label for="email">이메일:</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="date">예약 날짜:</label>
-                <input type="date" id="date" name="date" required>
-            </div>
-            <div class="form-group">
-                <label for="time">예약 시간:</label>
-                <input type="text" id="time" name="time" placeholder="HH:MM" required>
-            </div>
-            <div class="form-group">
-                <label for="guests">인원 수:</label>
-                <select id="guests" name="guests">
-                    <option value="1">1명</option>
-                    <option value="2">2명</option>
-                    <option value="3">3명</option>
-                    <option value="4">4명</option>
-                    <option value="5">5명</option>
-                    <option value="6">6명</option>
-                    <option value="7">7명</option>
-                    <option value="8">8명</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="bbq">바베큐 옵션:</label>
-                <select id="bbq" name="bbq">
-                    <option value="none">없음</option>
-                    <option value="basic">기본 바베큐</option>
-                    <option value="deluxe">디럭스 바베큐</option>
-                </select>
-            </div>
-            <button type="submit">예약하기</button>
-        </form>
+        <h1>예약 및 결제</h1>
 
+        <!-- 예약 폼 -->
+        <div id="reservation-section">
+            <h2>예약하기</h2>
+            <form id="reservation-form">
+                <div class="form-group">
+                    <label for="name">이름:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">이메일:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="date">예약 날짜:</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="people">인원 수:</label>
+                    <input type="number" id="people" name="people" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="bbq">바베큐 옵션:</label>
+                    <select id="bbq" name="bbq">
+                        <option value="none">없음</option>
+                        <option value="standard">기본</option>
+                        <option value="deluxe">디럭스</option>
+                    </select>
+                </div>
+                <button type="submit">다음 단계: 결제하기</button>
+            </form>
+        </div>
+
+        <!-- 결제 폼 -->
+        <div id="payment-section" class="hidden">
+            <h2>결제하기</h2>
+            <form id="payment-form">
+                <div class="form-group">
+                    <label for="card-number">카드 번호:</label>
+                    <input type="text" id="card-number" name="card-number" required>
+                </div>
+                <div class="form-group">
+                    <label for="card-expiry">유효 기간:</label>
+                    <input type="text" id="card-expiry" name="card-expiry" required>
+                </div>
+                <div class="form-group">
+                    <label for="card-cvc">CVC:</label>
+                    <input type="text" id="card-cvc" name="card-cvc" required>
+                </div>
+                <button type="submit">결제하기</button>
+            </form>
+        </div>
+
+        <!-- 결과 메시지 -->
         <div id="response-message" class="response-message"></div>
     </div>
 
     <script>
-        document.getElementById('reservation').addEventListener('submit', function(event) {
+        document.getElementById('reservation-form').addEventListener('submit', function(event) {
             event.preventDefault(); // 폼 제출을 막습니다.
 
-            // 입력 필드에서 값 가져오기
+            // 예약 정보 가져오기
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const date = document.getElementById('date').value;
-            const time = document.getElementById('time').value;
-            const guests = document.getElementById('guests').value;
+            const people = document.getElementById('people').value;
             const bbq = document.getElementById('bbq').value;
 
             // 예약 정보 객체 생성
@@ -126,41 +141,96 @@
                 name: name,
                 email: email,
                 date: date,
-                time: time,
-                guests: guests,
+                people: people,
                 bbq: bbq
             };
 
             // 서버에 예약 정보 전송
-            fetch('/res', {
-                method: 'get',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(reservationData)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('예약 처리에 실패했습니다.');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // 서버 응답에 따른 메시지 표시
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/res', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+
+            xhr.onload = function() {
                 const responseMessage = document.getElementById('response-message');
-                if (data.success) {
-                    responseMessage.textContent = '예약이 성공적으로 완료되었습니다!';
-                    responseMessage.className = 'response-message success';
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        // 예약 성공 시 결제 섹션 표시
+                        document.getElementById('reservation-section').classList.add('hidden');
+                        document.getElementById('payment-section').classList.remove('hidden');
+                    } else {
+                        responseMessage.textContent = '예약 처리에 실패했습니다. 다시 시도해 주세요.';
+                        responseMessage.className = 'response-message error';
+                    }
                 } else {
-                    responseMessage.textContent = '예약 처리에 실패했습니다. 다시 시도해 주세요.';
+                    responseMessage.textContent = '예약 처리 중 오류가 발생했습니다.';
                     responseMessage.className = 'response-message error';
                 }
-            })
-            .catch(error => {
+            };
+
+            xhr.onerror = function() {
                 const responseMessage = document.getElementById('response-message');
-                responseMessage.textContent = '예약 처리 중 오류가 발생했습니다: ' + error.message;
+                responseMessage.textContent = '예약 요청에 실패했습니다.';
                 responseMessage.className = 'response-message error';
-            });
+            };
+
+            xhr.send(JSON.stringify(reservationData));
+        });
+
+        document.getElementById('payment-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // 폼 제출을 막습니다.
+
+            // 결제 정보 가져오기
+            const cardNumber = document.getElementById('card-number').value;
+            const cardExpiry = document.getElementById('card-expiry').value;
+            const cardCvc = document.getElementById('card-cvc').value;
+
+            // 결제 정보 객체 생성
+            const paymentData = {
+                cardNumber: cardNumber,
+                cardExpiry: cardExpiry,
+                cardCvc: cardCvc
+            };
+
+            // 서버에 결제 정보 전송
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/pay', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+
+            xhr.onload = function() {
+                const responseMessage = document.getElementById('response-message');
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        responseMessage.textContent = '결제가 성공적으로 완료되었습니다!';
+                        responseMessage.className = 'response-message success';
+
+                        // 예약 완료 메시지 추가
+                        const reservationMessage = document.createElement('p');
+                        reservationMessage.textContent = '예약이 성공적으로 완료되었습니다!';
+                        reservationMessage.className = 'response-message success';
+                        responseMessage.appendChild(reservationMessage);
+
+                        // 결제 및 예약 섹션 숨기기
+                        document.getElementById('payment-section').classList.add('hidden');
+                        document.getElementById('reservation-section').classList.add('hidden');
+                    } else {
+                        responseMessage.textContent = '결제 처리에 실패했습니다. 다시 시도해 주세요.';
+                        responseMessage.className = 'response-message error';
+                    }
+                } else {
+                    responseMessage.textContent = '결제 처리 중 오류가 발생했습니다.';
+                    responseMessage.className = 'response-message error';
+                }
+            };
+
+            xhr.onerror = function() {
+                const responseMessage = document.getElementById('response-message');
+                responseMessage.textContent = '결제 요청에 실패했습니다.';
+                responseMessage.className = 'response-message error';
+            };
+
+            xhr.send(JSON.stringify(paymentData));
         });
     </script>
 </body>

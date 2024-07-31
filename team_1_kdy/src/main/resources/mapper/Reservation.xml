@@ -12,4 +12,12 @@ select * from customer where idx=#{idx}
 	#{ReservationDate}
 	)
 </insert>
+<insert id="pay">
+insert into pay values(
+ 	#{cardNumber},
+ 	#{cardExpiry},
+ 	#{cardCvc},
+ 	#{Amount}
+)
+</insert>
 </mapper>

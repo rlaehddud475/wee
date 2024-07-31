@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.korea.team_1_kdy.mapper.ReservationMapper;
 import com.korea.team_1_kdy.vo.CustomerVO;
+import com.korea.team_1_kdy.vo.PayVO;
 import com.korea.team_1_kdy.vo.ReservationVO;
 
 import lombok.RequiredArgsConstructor;
@@ -19,5 +20,8 @@ public class ReservationDAO {
 	}
 	public List<ReservationVO> reservation(String date) {
 		return reservationMapper.reservation(date);
+	}
+	public List<PayVO> pay(){
+		return reservationMapper.pay();
 	}
 }

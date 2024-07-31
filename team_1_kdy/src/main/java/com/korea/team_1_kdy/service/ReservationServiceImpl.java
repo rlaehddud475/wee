@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.korea.team_1_kdy.dao.ReservationDAO;
 import com.korea.team_1_kdy.vo.CustomerVO;
+import com.korea.team_1_kdy.vo.PayVO;
 import com.korea.team_1_kdy.vo.ReservationVO;
 
 import lombok.RequiredArgsConstructor;
@@ -24,4 +25,11 @@ public class ReservationServiceImpl implements ReservationService {
 	public List<CustomerVO> mypage(int idx) {
 		return reservationDAO.mypage(idx);
 	}
+
+	@Override
+	public List<PayVO> pay() {
+		return reservationDAO.pay();
+	}
+
+
 }

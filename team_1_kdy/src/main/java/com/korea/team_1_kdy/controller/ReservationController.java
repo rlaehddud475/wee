@@ -65,4 +65,9 @@ import lombok.RequiredArgsConstructor;
 		        mav.addObject("amount", amount);
 		        return mav;
 		      }
+		 
+		 @GetMapping("/payment")
+		 public String patment() {
+			 return "payment";
+		 }
 }

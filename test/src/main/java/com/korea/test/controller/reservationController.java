@@ -1,4 +1,4 @@
-package com.korea.test.controller;
+package com.korea	.test.controller;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -21,7 +21,7 @@ public class reservationController {
 	private final ReservationService reservationService;
 	
 	@GetMapping("/main")
-	public String mian(Model model) {	
+	public String main(Model model) {	
 		return "main";
 	}
 	
@@ -33,7 +33,7 @@ public class reservationController {
 		return "reservation_form";
 	}
 	
-	@PostMapping("reservation_insert")						// 예약 테이블에 저장
+	@PostMapping("/reservation_insert")						// 예약 테이블에 저장
 	public RedirectView res_insert(ReservationVO vo, Model model)
 	{
 		// 넘어온 데이터

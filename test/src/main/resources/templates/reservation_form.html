@@ -171,9 +171,9 @@ footer {
 					<caption>:::캠핑장 예약:::</caption>
 					<tr>
 						<th>날짜</th>
-						<td><input type="text" th:field="*{date}" id="datepicker" name="date"></td>
+						<td><input type="text" th:field="*{ReservationDate}" id="datepicker" name="date"></td>
 						<th>인원 수</th>
-						<td><input type="number" min="0" max="10" th:field="*{num_people}" name="num_people"></td>
+						<td><input type="number" min="0" max="10" th:field="*{num_people}" name="num_people" id="num_peoele"></td>
 					</tr>
 					<td colspan="4" class="test">
 						<div class="t1">
@@ -213,6 +213,22 @@ footer {
 						</div>
 					</td>
 					<tr>
+						<td colspan="4">
+						  <div class="form-group" th:field="*{amount}">
+						   <p id="total-amount">총 결제 금액: 10,000원</p>
+<!--                 <label for="amount">결제 금액: </label> -->
+<!-- 	           <input type="number" th:field="*{amount}" name="amount" required> -->
+            </div>
+<!--             <div class="form-group"> -->
+<!--                 <label for="paymentMethod">결제 방법:</label> -->
+<!--                 <select id="paymentMethod" name="paymentMethod" required> -->
+<!--                     <option value="">선택하세요</option> -->
+<!--                     <option value="credit_card">신용카드</option> -->
+<!--                     <option value="paypal">PayPal</option> -->
+<!--                     <option value="bank_transfer">은행 이체</option> -->
+<!--                 </select> -->
+<!--             </div> -->
+						</td>
 					</tr>
 					<tr>
 						<td colspan="4" align="center"><input type="button" value="예약하기" name="join"> <a href="/main"> <input type="button" value="취소" name="cancel"></a></td>
@@ -258,7 +274,29 @@ $(function() {
 			checkboxes.not(this).prop('checked', false);
 		}
 	});
-	
+	 $(document).ready(function() {
+         function calculateAmount(numPeople) {
+             const basePrice = 10000; // 기본 금액
+             const additionalPricePerPerson = 5000; // 추가 인원 1명당 금액
+
+             // 기본 금액에 추가 인원 수에 따라 계산
+             let totalAmount = basePrice + (numPeople - 1) * additionalPricePerPerson;
+
+             return totalAmount;
+         }
+
+         $('#num_people').on('input', function() {
+             const numPeople = parseInt($(this).val(), 10);
+
+             // 유효성 검사: 인원수는 1명 이상이어야 함
+             if (numPeople >= 1) {
+                 const amount = calculateAmount(numPeople);
+                 $('#total-amount').text('총 결제 금액: ' + amount.toLocaleString() + '원');
+             } else {
+                 $('#total-amount').text('인원수는 1명 이상이어야 합니다.');
+             }
+         });
+     });
 	// 예약하기 버튼 클릭 시 폼 제출
 	$("input[name='join']").on("click", function() {
 		$("form[name='f']").submit();
@@ -277,29 +315,6 @@ $(function() {
 	    }
 	});
 });
-window.onload = function() {
-    const checkbox = "input[type='checkbox']";
-    // 로컬 스토리지에서 체크박스 상태 가져오기
-    const reserved = localStorage.getItem('reserved');
-    if (reserved === 'true') {
-        checkbox.checked = true;
-        checkbox.disabled = true; // 비활성화
-    }
-};
-
-function handleCheckboxClick() {
-    const checkbox = "input[type='checkbox']";
-    if (checkbox.checked) {
-        // 체크박스가 체크되면 로컬 스토리지에 상태 저장
-        localStorage.setItem('reserved', 'true');
-        checkbox.disabled = true; // 체크박스 비활성화
-    } else {
-        // 체크박스를 체크 해제하면 상태를 로컬 스토리지에서 제거
-        localStorage.removeItem('reserved');
-        checkbox.disabled = false; // 체크박스 활성화
-    }
-}
-
 </script>
 </body>
 </html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>공지사항</title>
+<style type="text/css">
+	a{
+		text-decoration : none;
+	}
+	
+	table{
+		border-collapse: collapse;
+	}
+</style>
+</head>
+<body>
+	<table border="1" width="700">
+		<tr>
+			<td colspan="5"><img src="/img/title_04.gif"></td>
+		</tr>
+		<tr>
+			<th>번호</th>
+			<th>제목</th>
+			<th>작성자</th>
+			<th>작성일</th>
+			<th>조회수</th>
+		</tr>
+		<th:block th:each="vo : ${list}">
+			<tr th:object="${vo}">
+				<td th:text="*{idx}"></td>
+				<td>
+					<th:block th:if="${vo.delInfo ne -1}">
+						<a th:href="@{/view(idx=*{idx}, page=${param.page})}">
+							<font color="black" th:text="*{subject}"></font>
+						</a>
+					</th:block>
+		
+					<!-- 삭제된 글은 회색으로 제목만 띄우기(누를 수 없음)
+					delInfo가 -1이면 삭제된걸로 침  -->
+					<th:block th:if="${vo.delInfo eq -1}">
+						<font color="gray" th:text="*{subject}"></font>
+					</th:block>
+				</td>
+				
+				<!-- delInfo가 -1이면 unknown으로 나오고
+				-1이 아니면 작성자이름이 출력되도록 작성하기 -->
+				<td th:if="${vo.delInfo eq -1}" th:text="unknown"></td>
+				<td th:unless="${vo.delInfo eq -1}" th:text="*{name}"></td>
+				<!-- 작성날짜 -->
+				<td th:text="${#strings.substring(vo.regdate,0,10)}"></td>
+				
+				<!-- 조회수 -->
+				<td th:text="*{readhit}"></td>
+			</tr>
+			</th:block>
+				<!-- 페이지 메뉴 -->
+			<tr>
+				<td colspan="5" align="center">
+					<div id="pageMenu"></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="5" align="right">
+					<a th:href="@{/insert_form(page=${param.page})}">
+						<img src="/img/btn_reg.gif" style="cursor:pointer;">
+					</a>
+				</td>
+			</tr>
+	</table>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script th:inline="javascript">
+	//pageMenu변수에 controller에서 넘어온 pageMenu를 대입한다.
+	let pageMenu = /*[[${pageMenu}]]*/""
+	
+	//pageMenu라는 id를 가진 div에 pageMenu값 넣기
+	$("#pageMenu").html(pageMenu);
+	
+
+	
+</script>
+</html>

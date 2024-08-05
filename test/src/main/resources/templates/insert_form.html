@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<form name="f" th:action="@{/insert}" th:object="${vo}" method="post">
+		<input type="hidden" name="page" th:value="${param.page}">
+		<table border="1">
+			<tr>
+				<th>제목</th>
+				<td><input th:field="*{subject}"></td>
+			</tr>
+			<tr>
+				<th>작성자</th>
+				<td><input th:field="*{name}"></td>
+			</tr>
+			<tr>
+				<th>내용</th>
+				<td><textarea th:field="*{content}" rows="10" cols="50"></textarea></td>
+			</tr>
+			<tr>
+				<th>비밀번호</th>
+				<td><input th:field="*{pwd}" type="password"></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<img src="/img/btn_reg.gif" id="send_check" style="cursor:pointer;">
+					<a th:href="@{/notices_board(page=${param.page})}">
+						<img src="/img/btn_back.gif" style="cursor:pointer;">
+					</a>
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script type="text/javascript">
+
+//추가버튼을 변수에 담기
+const $sendBtn = $("img#send_check");
+$sendBtn.on("click",function(){
+	//form태그 검색하기
+	$("form[name='f']").submit();
+})
+</script>
+</html>

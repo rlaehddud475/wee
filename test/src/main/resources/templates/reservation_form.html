@@ -145,7 +145,7 @@ footer {
 		<div class="logo">짱구 캠핑장!</div>
 	</a>
 	<nav class="menu">
-		<a href="#notices">공지사항</a> <a href="#reserve">예약하기</a> <a href="#contact">문의하기</a> <a href="#events">이벤트</a>
+		<a href="/notices_board">공지사항</a> <a href="#reserve">예약하기</a> <a href="#contact">문의하기</a> <a href="#events">이벤트</a>
 	</nav>
 </header>
 
@@ -159,7 +159,7 @@ footer {
 		<div class="events">
 			<h2>이벤트 게시판</h2>
 			<div class="events-list">
-				<!-- 이벤트 항목 -->
+
 			</div>
 		</div>
 	</div>
@@ -214,11 +214,14 @@ footer {
 					</td>
 					<tr>
 						<td colspan="4">
-						  <div class="form-group" th:field="*{amount}">
-						   <p id="total-amount">총 결제 금액: 10,000원</p>
+<!-- 						  <div class="form-group" th:field="*{amount}"> -->
+						 
 <!--                 <label for="amount">결제 금액: </label> -->
 <!-- 	           <input type="number" th:field="*{amount}" name="amount" required> -->
-            </div>
+<!--             </div> -->
+	 <div class="result">
+            <p>총 금액: <span id="amount">20000</span> 원</p>
+        </div>
 <!--             <div class="form-group"> -->
 <!--                 <label for="paymentMethod">결제 방법:</label> -->
 <!--                 <select id="paymentMethod" name="paymentMethod" required> -->
@@ -231,7 +234,7 @@ footer {
 						</td>
 					</tr>
 					<tr>
-						<td colspan="4" align="center"><input type="button" value="예약하기" name="join"> <a href="/main"> <input type="button" value="취소" name="cancel"></a></td>
+						<td colspan="4" align="center"><input type="button" value="예약하기" name="join"  id="reserve-button" > <a href="/main"> <input type="button" value="취소" name="cancel"></a></td>
 					</tr>
 				</table>
 			</form>
@@ -274,29 +277,8 @@ $(function() {
 			checkboxes.not(this).prop('checked', false);
 		}
 	});
-	 $(document).ready(function() {
-         function calculateAmount(numPeople) {
-             const basePrice = 10000; // 기본 금액
-             const additionalPricePerPerson = 5000; // 추가 인원 1명당 금액
+	 
 
-             // 기본 금액에 추가 인원 수에 따라 계산
-             let totalAmount = basePrice + (numPeople - 1) * additionalPricePerPerson;
-
-             return totalAmount;
-         }
-
-         $('#num_people').on('input', function() {
-             const numPeople = parseInt($(this).val(), 10);
-
-             // 유효성 검사: 인원수는 1명 이상이어야 함
-             if (numPeople >= 1) {
-                 const amount = calculateAmount(numPeople);
-                 $('#total-amount').text('총 결제 금액: ' + amount.toLocaleString() + '원');
-             } else {
-                 $('#total-amount').text('인원수는 1명 이상이어야 합니다.');
-             }
-         });
-     });
 	// 예약하기 버튼 클릭 시 폼 제출
 	$("input[name='join']").on("click", function() {
 		$("form[name='f']").submit();
@@ -313,6 +295,10 @@ $(function() {
 	        // 경고창으로 오류 메시지 표시
 	        alert(errorMessage);
 	    }
+	});
+	
+	$("input[name='join']").on("click", function() {
+		$("form[name='f']").submit();
 	});
 });
 </script>

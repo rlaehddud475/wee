@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.korea.test.mapper.BoardMapper">
+	<!-- 페이지별 게시물 조회
+	순위를 매겨서 1페이지는 1 ~ 10등, 2페이지 11 ~ 20등까지 조회 -->
+	<select id="selectList">
+		SELECT * FROM board
+	</select>
+	
+	<select id="getRowTotal">
+		SELECT COUNT(*) FROM BOARD
+	</select>
+	
+	<select id="selectOne">
+		SELECT * FROM BOARD WHERE IDX = #{idx}
+	</select>
+	
+	<update id="update_readhit">
+		UPDATE BOARD
+		SET READHIT = READHIT + 1
+		WHERE IDX = #{idx}
+	</update>
+	
+	<insert id="insert">
+	INSERT INTO BOARD VALUES(
+		SEQ_BOARD_IDX.NEXTVAL,
+		#{name},
+		#{subject},
+		#{content},
+		#{pwd},
+		sysdate,
+		0,
+		0	
+	)
+	</insert>
+	
+	<update id="del_update">
+	UPDATE BOARD SET
+	SUBJECT = #{subject},
+	NAME = #{name},
+	DEL_INFO = -1
+	WHERE IDX = #{idx}
+	</update>
+	
+
+
+	
+</mapper>

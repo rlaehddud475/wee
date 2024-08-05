@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<table border="1">
+		<caption>:::게시글 상세보기:::</caption>
+		<tr>
+			<th>제목</th>
+			<td th:text="${vo.subject}"></td>
+		</tr>
+		<tr>
+			<th>작성자</th>
+			<td th:text="${vo.name}"></td>
+		</tr>
+		<tr>
+			<th>작성일</th>
+			<td th:text="${vo.regdate}"></td>
+		</tr>
+		<tr>
+			<th>내용</th>
+			<td width="500px" height="200px" th:text="${vo.content}"></td>
+		</tr>
+		<tr>
+			<th>비밀번호</th>
+			<td><input type="password" id="c_pwd"></td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<a th:href="@{/notices_board(page=${param.page})}">
+					<img src="/img/btn_list.gif">
+				</a>
+				<img src="/img/btn_delete.gif" id="del">
+			</td>
+		</tr>
+	</table>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script th:inline="javascript">
+	//입력한 비밀번호와 원본 비밀번호를 비교
+	let $pwd = /*[[${vo.pwd}]]*/"" //원본비밀번호
+	let $idx = /*[[${vo.idx}]]*/"" //글번호
+	
+	$("img[id='del']").on("click",function(){
+		if(!confirm("삭제하시겠습니까?")){
+			return;
+		}
+		
+		//입력한 비밀번호
+		let $c_pwd = $("input[type='password']").val();
+		
+		if($pwd != $c_pwd){
+			alert("비밀번호 불일치");
+			return
+		}
+		
+		//ajax를 이용해서 idx를 json으로 보내고 수정하고 목록으로 돌아가기
+		
+		//url : /board/del -> 제목:deleted , 작성자 : unknown으로 수정하기
+		//type : POST
+		//data : idx
+		//dataType : json
+		//contentType :"application/json; charset=utf-8"
+		$.ajax({
+			url : '/board/del',
+			type : 'POST',
+			data : JSON.stringify({idx : $idx}),
+			dataType : 'json',
+			contentType : 'application/json; charset=utf-8',
+			success : function(data){
+				alert("삭제성공")
+				window.location.href="/board/notices_board";
+			}
+		})
+		
+		
+		//성공했을시
+		//window.location.href="/board/board_list?page="+$page;
+	})
+
+	

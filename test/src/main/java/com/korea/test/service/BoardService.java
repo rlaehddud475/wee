@@ -18,4 +18,6 @@ public interface BoardService {
 	public int insert(BoardVO vo);
 	
 	public int del_update(BoardVO vo);
+	
+	public BoardVO select(String subject);
 }

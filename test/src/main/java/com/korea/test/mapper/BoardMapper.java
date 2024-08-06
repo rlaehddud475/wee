@@ -22,4 +22,6 @@ public List<BoardVO> selectList(HashMap<String, Integer> map);
 	
 	public int del_update(BoardVO vo);
 	
+	public BoardVO select(String subject);
+	
 }

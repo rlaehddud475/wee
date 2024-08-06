@@ -43,7 +43,7 @@ public class BoardController {
 //	}
 	
 	@GetMapping("notices_board")
-	public String list(Model model, @RequestParam(required=false, defaultValue="1") int page) {
+	public String list(Model model, @RequestParam(name="page",required=false, defaultValue="1") int page) {
 		
 		int start = (page-1) * Common.Board.BLOCKLIST+1;
 		int end = start + Common.Board.BLOCKLIST-1;
@@ -74,8 +74,40 @@ public class BoardController {
 		return "/notices_board";
 	}
 	
+	@GetMapping("events_board")
+	public String events_board(Model model, @RequestParam(name="page",required=false, defaultValue="1") int page) {
+		
+		int start = (page-1) * Common.Board.BLOCKLIST+1;
+		int end = start + Common.Board.BLOCKLIST-1;
+		
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("start", start);
+		map.put("end", end);
+		
+		//페이지 번호에 따른 전체 게시글 조회
+		List<BoardVO> list = boardService.selectList(map);
+		
+		model.addAttribute("list",list);
+		
+		session.removeAttribute("show");
+		
+		//전체 게시물 수 구하기
+		int rowTotal = boardService.getRowTotal();
+		
+		//페이지 메뉴 생성하기
+		String pageMenu = Paging.getPaging("board_list", 
+											page, 
+											rowTotal, 
+											Board.BLOCKLIST, 
+											Board.BLOCKPAGE);
+		
+		model.addAttribute("pageMenu",pageMenu);
+		
+		return "/events_board";
+	}
+	
 	@GetMapping("view")
-	public String view(Model model,int idx, @RequestParam(name = "page",required=false, defaultValue="1")int page) {
+	public String view(Model model,int idx, @RequestParam(name = "page",required=false, defaultValue="1") int page) {
 		BoardVO vo = boardService.selectOne(idx);
 		
 		model.addAttribute("vo",vo);
@@ -93,7 +125,25 @@ public class BoardController {
 		
 		return "/board_view";
 	}	
-	
+	@GetMapping("views")
+	public String views(Model model,int idx, @RequestParam(name = "page",required=false, defaultValue="1") int page) {
+		BoardVO vo = boardService.selectOne(idx);
+		
+		model.addAttribute("vo",vo);
+		
+		//조회수 증가하기
+		
+		//1. 특정 key를 가진 세션을 호출
+		String show = (String) session.getAttribute("show");
+		//2. value가 null이면 넘어온 idx의 readhit를 1증가시키고
+		//세션 key에 value를 세팅
+		if(show == null) {
+			int res = boardService.update_readhit(idx);
+			session.setAttribute("show", "r");
+		}
+		
+		return "/board_views";
+	}	
 	@GetMapping("insert_form")
 	public String insert_form(Model model,@RequestParam(name = "page",required=false,defaultValue="1")int page) {
 		model.addAttribute("vo",new BoardVO());
@@ -104,10 +154,10 @@ public class BoardController {
 	
 	@PostMapping("insert")
 	public RedirectView insert(BoardVO vo, @RequestParam(name = "page",required=false,defaultValue="1")int page) {
-		
+
 		int res = boardService.insert(vo);
 		if(res > 0) {
-			return new RedirectView("/notices_board?page="+page);
+			return new RedirectView("/events_board?page="+page);
 		}
 		return null;
 	}

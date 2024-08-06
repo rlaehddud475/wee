@@ -40,4 +40,8 @@ private final BoardMapper boardMapper;
 	public int del_update(BoardVO vo) {
 		return boardMapper.del_update(vo);
 	}
+	
+	public BoardVO select(String subject) {
+		return boardMapper.select(subject);
+	}
 }

@@ -5,7 +5,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form name="f" th:action="@{/insert}" th:object="${vo}" method="post">
+	<form name="f" th:action="@{/insert}" th:object="${vo}" method="POST">
 		<input type="hidden" name="page" th:value="${param.page}">
 		<table border="1">
 			<tr>
@@ -26,9 +26,10 @@
 			</tr>
 			<tr>
 				<td colspan="2">
-					<img src="/img/btn_reg.gif" id="send_check" style="cursor:pointer;">
-					<a th:href="@{/notices_board(page=${param.page})}">
-						<img src="/img/btn_back.gif" style="cursor:pointer;">
+					<a th:href="@{/insert}"><button id="send_check" style="cursor:pointer;">등록하기</button>
+					</a>
+					<a th:href="@{/events_board(page=${param.page})}">
+						<button style="cursor:pointer;">취소</button>
 					</a>
 				</td>
 			</tr>
@@ -39,7 +40,7 @@
 <script type="text/javascript">
 
 //추가버튼을 변수에 담기
-const $sendBtn = $("img#send_check");
+const $sendBtn = $("button#send_check");
 $sendBtn.on("click",function(){
 	//form태그 검색하기
 	$("form[name='f']").submit();

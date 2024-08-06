@@ -29,10 +29,10 @@
 		</tr>
 		<tr>
 			<td colspan="2">
-				<a th:href="@{/notices_board(page=${param.page})}">
-					<img src="/img/btn_list.gif">
+				<a th:href="@{/events_board(page=${param.page})}">
+					<button style="cursor: pointer;">목록</button>
 				</a>
-				<img src="/img/btn_delete.gif" id="del">
+				<a><button style="cursor: pointer;" id="del">삭제</button></a>
 			</td>
 		</tr>
 	</table>
@@ -43,7 +43,7 @@
 	let $pwd = /*[[${vo.pwd}]]*/"" //원본비밀번호
 	let $idx = /*[[${vo.idx}]]*/"" //글번호
 	
-	$("img[id='del']").on("click",function(){
+	$("button[id='del']").on("click",function(){
 		if(!confirm("삭제하시겠습니까?")){
 			return;
 		}
@@ -71,7 +71,7 @@
 			contentType : 'application/json; charset=utf-8',
 			success : function(data){
 				alert("삭제성공")
-				window.location.href="/board/notices_board";
+				window.location.href="/events_board";
 			}
 		})
 		

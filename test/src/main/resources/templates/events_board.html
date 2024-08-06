@@ -27,7 +27,7 @@
 				<td th:text="*{idx}"></td>
 				<td>
 					<th:block th:if="${vo.delInfo ne -1}">
-						<a th:href="@{/views(idx=*{idx}, page=${param.page})}">
+						<a th:href="@{/view(idx=*{idx}, page=${param.page})}">
 							<font color="black" th:text="*{subject}"></font>
 						</a>
 					</th:block>
@@ -54,6 +54,13 @@
 			<tr>
 				<td colspan="5" align="center">
 					<div id="pageMenu"></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="5" align="right">
+					<a th:href="@{/insert_form(page=${param.page})}">
+						<button style="cursor:pointer;">작성하기</button>
+					</a>
 				</td>
 			</tr>
 	</table>

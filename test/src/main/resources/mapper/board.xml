@@ -14,7 +14,9 @@
 	<select id="selectOne">
 		SELECT * FROM BOARD WHERE IDX = #{idx}
 	</select>
-	
+	<select id="select">
+		SELECT subject FROM BOARD WHERE IDX = #{idx}
+	</select>
 	<update id="update_readhit">
 		UPDATE BOARD
 		SET READHIT = READHIT + 1

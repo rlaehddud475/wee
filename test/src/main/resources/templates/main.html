@@ -250,12 +250,9 @@ footer {
 			</div>
 			<div class="events">
 				<h2>이벤트 게시판</h2>
-					<div class="events-list">
-						<div th:text="*{subject}"></div>
-        			</div>
+            <li th:each="subject : ${subject}" th:text="*{subject}">Subject</li>
 				</div>
 			</div>
-		</div>
 
 		<!-- 오른쪽 중단: 사진 슬라이더 -->
 		<div class="right-section">

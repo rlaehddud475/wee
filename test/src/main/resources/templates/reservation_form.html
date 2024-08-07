@@ -159,10 +159,7 @@ footer {
 		</div>
 		<div class="events">
 			<h2>이벤트 게시판</h2>
-			<div class="events-list" >
-			<div th:text="*{subject}"></div>
-			</div>
-		</div>
+            <li th:each="subject : ${subject}" th:text="*{subject}">Subject</li>
 	</div>
 
 	<div class="right-section">

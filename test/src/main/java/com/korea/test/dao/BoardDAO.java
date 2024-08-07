@@ -2,8 +2,10 @@ package com.korea.test.dao;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.korea.test.mapper.BoardMapper;
 import com.korea.test.vo.BoardVO;
@@ -41,7 +43,7 @@ private final BoardMapper boardMapper;
 		return boardMapper.del_update(vo);
 	}
 	
-	public BoardVO select(String subject) {
-		return boardMapper.select(subject);
+	public List<String> selectSub() {
+		return boardMapper.selectSub();
 	}
 }

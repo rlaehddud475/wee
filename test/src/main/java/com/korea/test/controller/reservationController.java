@@ -1,16 +1,20 @@
 package com.korea	.test.controller;
 
+import java.util.List;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.korea.test.service.BoardService;
 import com.korea.test.service.ReservationService;
-
+import com.korea.test.vo.BoardVO;
 import com.korea.test.vo.ReservationVO;
 
 import lombok.RequiredArgsConstructor;
@@ -20,15 +24,16 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/")
 public class reservationController {
 	private final ReservationService reservationService;
-	
+	private final BoardService boardService;
 	@GetMapping("/main")
 	public String main(Model model) {	
+		model.addAttribute("subject", boardService.selectSub());
 		return "main";
 	}
 	
 	@GetMapping("/reservation_form")						// 예약 페이지 이동
 	public String reservation(Model model) {
-		
+        model.addAttribute("subjects", boardService.selectSub());
 		model.addAttribute("vo", new ReservationVO());
 		
 		return "reservation_form";

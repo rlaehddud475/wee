@@ -1,9 +1,11 @@
-package com.korea.test.service;
+	package com.korea.test.service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.korea.test.dao.BoardDAO;
 import com.korea.test.vo.BoardVO;
@@ -46,7 +48,10 @@ public class BoardServiceImpl implements BoardService {
 }
 
 	@Override
-	public BoardVO select(String subject) {
-		return boardDAO.select(subject);
+	public List<String> selectSub() {
+		return boardDAO.selectSub();
 	}
+
+
+	
 }

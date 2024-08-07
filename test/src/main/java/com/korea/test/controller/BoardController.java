@@ -161,7 +161,6 @@ public class BoardController {
 		}
 		return null;
 	}
-	
 	@PostMapping("del")
 	@ResponseBody
 	public String del(@RequestBody String body) {

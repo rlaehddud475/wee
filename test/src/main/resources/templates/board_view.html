@@ -32,7 +32,7 @@
 				<a th:href="@{/events_board(page=${param.page})}">
 					<button style="cursor: pointer;">목록</button>
 				</a>
-				<a><button style="cursor: pointer;" id="del">삭제</button></a>
+				<a><button style="cursor: pointer" id="del">삭제</button></a>
 			</td>
 		</tr>
 	</table>
@@ -43,7 +43,7 @@
 	let $pwd = /*[[${vo.pwd}]]*/"" //원본비밀번호
 	let $idx = /*[[${vo.idx}]]*/"" //글번호
 	
-	$("button[id='del']").on("click",function(){
+	$("#del").on('click',function(){
 		if(!confirm("삭제하시겠습니까?")){
 			return;
 		}
@@ -70,14 +70,10 @@
 			dataType : 'json',
 			contentType : 'application/json; charset=utf-8',
 			success : function(data){
-				alert("삭제성공")
+				alert("삭제성공")	
 				window.location.href="/events_board";
 			}
 		})
-		
-		
-		//성공했을시
-		//window.location.href="/board/board_list?page="+$page;
 	})
-
-	
+</script>
+</html>	

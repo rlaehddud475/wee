@@ -179,7 +179,6 @@ public class BoardController {
 		
 		vo.setSubject("deleted");
 		vo.setName("unknown");
-		
 		int res = boardService.del_update(vo);
 		
 		if(res > 0) {

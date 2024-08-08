@@ -4,17 +4,26 @@
 <meta charset="UTF-8">
 <title>공지사항</title>
 <style type="text/css">
+	*{
+		color: white; 
+	}
 	a{
 		text-decoration : none;
 	}
 	
 	table{
 		border-collapse: collapse;
+		background-color: #232323;
+		color: white;
 	}
+	button {
+	background-color: #565656;
+	color: white;
+}
 </style>
 </head>
 <body>
-	<table border="1" width="700">
+	<table border="1" width="700" align="center">
 		<tr>
 			<th>번호</th>
 			<th>제목</th>
@@ -60,6 +69,9 @@
 				<td colspan="5" align="right">
 					<a th:href="@{/insert_form(page=${param.page})}">
 						<button style="cursor:pointer;">작성하기</button>
+					</a>
+					<a th:href="@{/main}">
+						<button style="cursor:pointer;">처음으로</button>
 					</a>
 				</td>
 			</tr>

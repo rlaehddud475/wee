@@ -4,9 +4,8 @@
 	<!-- 페이지별 게시물 조회
 	순위를 매겨서 1페이지는 1 ~ 10등, 2페이지 11 ~ 20등까지 조회 -->
 	<select id="selectList">
-		SELECT * FROM board
+	SELECT * FROM board
 	</select>
-	
 	<select id="getRowTotal">
 		SELECT COUNT(*) FROM BOARD
 	</select>
@@ -37,13 +36,10 @@
 	)
 	</insert>
 	
-	<update id="del_update">
-	UPDATE BOARD SET
-	SUBJECT = #{subject},
-	NAME = #{name},
-	DEL_INFO = -1
+<delete id="del_update">
+	delete from board
 	WHERE IDX = #{idx}
-	</update>
+	</delete >
 	
 
 

@@ -23,18 +23,18 @@
 		WHERE IDX = #{idx}
 	</update>
 	
-	<insert id="insert">
-	INSERT INTO BOARD VALUES(
-		SEQ_BOARD_IDX.NEXTVAL,
-		#{name},
-		#{subject},
-		#{content},
-		#{pwd},
-		sysdate,
-		0,
-		0	
-	)
-	</insert>
+	  <!-- 게시글 등록 쿼리 -->
+       <insert id="insert">
+        INSERT INTO board
+        VALUES (seq_board_idx.nextval,#{subject}, #{name}, #{content}, #{pwd}, SYSDATE, 0, 0)
+    </insert>
+
+    <!-- Check insertion -->
+    <select id="insertCheck">
+        SELECT *
+        FROM board
+        WHERE idx = #{idx}
+    </select>
 	
 <delete id="del_update">
 	delete from board

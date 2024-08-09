@@ -1,5 +1,7 @@
 package com.korea.test.vo;
 
+import java.sql.Timestamp;
+
 import lombok.Data;
 
 @Data

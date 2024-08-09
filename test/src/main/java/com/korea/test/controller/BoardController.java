@@ -152,15 +152,65 @@ public class BoardController {
 		return "/insert_form";
 	}
 	
-	@PostMapping("insert")
-	public RedirectView insert(BoardVO vo, @RequestParam(name = "page",required=false,defaultValue="1")int page) {
+		 @PostMapping("insert")
+		    @ResponseBody
+		    public String insert(@RequestBody String body, @RequestParam(name = "page", required = false, defaultValue = "1") int page) {
+		        ObjectMapper om = new ObjectMapper();
+		        Map<String, String> data;
+	
+		        // Parse JSON body
+		        try {
+		            data = om.readValue(body, new TypeReference<Map<String, String>>() {});
+		        } catch (Exception e) {
+		            e.printStackTrace(); // Log the exception
+		            return "{\"param\":\"error\"}";
+		        }
+	
+		        // Extract fields
+		        String subject = data.get("subject");
+		        String name = data.get("name");
+		        String content = data.get("content");
+		        String pwd = data.get("pwd");
+	
+		        // Validate inputs
+		        if (subject == null || subject.trim().isEmpty() ||
+		            name == null || name.trim().isEmpty() ||
+		            content == null || content.trim().isEmpty() ||
+		            pwd == null || pwd.trim().isEmpty()) {
+		            return "{\"param\":\"missing\"}"; // Respond with missing parameter error
+		        }
+	
+		        try {
+		            // Create and populate BoardVO object
+		            BoardVO newVo = new BoardVO();
+		            newVo.setSubject(subject);
+		            newVo.setName(name);
+		            newVo.setContent(content);
+		            newVo.setPwd(pwd);
+	
+		            int idx = boardService.insert(newVo); // Insert data into the database
+	
+		            // Check if the insertion was successful
+		            BoardVO insertedVo = boardService.insertCheck(idx);
+		            if (insertedVo == null ||
+		                !insertedVo.getSubject().equals(subject) ||
+		                !insertedVo.getPwd().equals(pwd) ||
+		                !insertedVo.getName().equals(name) ||
+		                !insertedVo.getContent().equals(content)) {
+		                return "{\"param\":\"no\"}"; // Insertion check failed
+		            }
+		            	
+	
+		            // Set session attribute
+		            session.setAttribute("idx", insertedVo);
+		            return "{\"param\":\"yes\"}"; // Insertion successful
+		        } catch (Exception e) {
+		            e.printStackTrace(); // Log the exception
+		            return "{\"param\":\"error\"}";
+		        }
+		    }
 
-		int res = boardService.insert(vo);
-		if(res > 0) {
-			return new RedirectView("/events_board?page="+page);
-		}
-		return null;
-	}
+
 	@PostMapping("del")
 	@ResponseBody
 	public String del(@RequestBody String body) {

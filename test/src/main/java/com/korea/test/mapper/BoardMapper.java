@@ -24,7 +24,8 @@ public List<BoardVO> selectList(HashMap<String, Integer> map);
 	public int del_update(BoardVO vo);
 	
 	public List<String> selectSub();
-	
+	public BoardVO insertCheck(int idx);
+
 	
 	
 }

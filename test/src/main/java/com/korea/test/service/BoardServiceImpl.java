@@ -52,6 +52,11 @@ public class BoardServiceImpl implements BoardService {
 		return boardDAO.selectSub();
 	}
 
+	@Override
+	public BoardVO insertCheck(int idx) {
+		return boardDAO.insertCheck(idx);
+	}
+
 
 	
 }

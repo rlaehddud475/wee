@@ -1,15 +1,19 @@
 package com.korea.test.vo;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class CustomerVO {
+	// 고객 테이블 
+	
+	private int idx;
 	private String id;
 	private String nickname;
-	private String Password;
-	private String Birth;
-	private String PhoneNumber;
-	private String Email;
-	private String ReservationNumber;
-	private int idx;
+	private String password;
+	private String phonenumber;
+	private String email;
+	private String reservationnumber;
+	private String birth;
 }

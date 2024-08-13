@@ -3,24 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>공지사항</title>
-<style type="text/css">
-	*{
-		background :  #232323;
-		color: white; 
-	}
-	a{
-		text-decoration : none;
-	}
-	
-	table{
-		border-collapse: collapse;
-		color: white;
-	}
-	button {
-	background-color: #565656;
-	color: white;
-}
-</style>
+<link th:href="@{/css/events_board.css}" rel="stylesheet" />
 </head>
 <body>
 	<table border="1" width="700" align="center">
@@ -78,14 +61,5 @@
 	</table>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script th:inline="javascript">
-	//pageMenu변수에 controller에서 넘어온 pageMenu를 대입한다.
-	let pageMenu = /*[[${pageMenu}]]*/""
-	
-	//pageMenu라는 id를 가진 div에 pageMenu값 넣기
-	$("#pageMenu").html(pageMenu);
-	
-
-	
-</script>
+<script type="text/javascript" th:src="@{/js/events_board.js}"></script>
 </html>

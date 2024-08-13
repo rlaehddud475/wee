@@ -1,0 +1,17 @@
+@charset "UTF-8";
+*{
+	background :  #232323;
+	color: white; 
+}
+a{
+	text-decoration : none;
+}
+	
+table{
+	border-collapse: collapse;
+	color: white;
+}
+	button {
+	background-color: #565656;
+	color: white;
+}

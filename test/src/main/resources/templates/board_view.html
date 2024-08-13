@@ -3,25 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link th:href="@{/css/board_view.css}" rel="stylesheet" />
 </head>
-<style type="text/css">
-	*{
-		background :  #232323;
-		color: white; 
-	}
-	a{
-		text-decoration : none;
-	}
-	
-	table{
-		border-collapse: collapse;
-		color: white;
-	}
-	button {
-	background-color: #565656;
-	color: white;
-}
-</style>
 <body>
 	<table border="1">
 		<caption>:::게시글 상세보기:::</caption>
@@ -56,42 +39,5 @@
 	</table>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script th:inline="javascript">
-	//입력한 비밀번호와 원본 비밀번호를 비교
-	let $pwd = /*[[${vo.pwd}]]*/"" //원본비밀번호
-	let $idx = /*[[${vo.idx}]]*/"" //글번호
-	
-	$("#del").on('click',function(){
-		if(!confirm("삭제하시겠습니까?")){
-			return;
-		}
-		
-		//입력한 비밀번호
-		let $c_pwd = $("input[type='password']").val();
-		
-		if($pwd != $c_pwd){
-			alert("비밀번호 불일치");
-			return
-		}
-		
-		//ajax를 이용해서 idx를 json으로 보내고 수정하고 목록으로 돌아가기
-		
-		//url : /board/del -> 제목:deleted , 작성자 : unknown으로 수정하기
-		//type : POST
-		//data : idx
-		//dataType : json
-		//contentType :"application/json; charset=utf-8"
-		$.ajax({
-			url : '/del',
-			type : 'POST',
-			data : JSON.stringify({idx : $idx}),
-			dataType : 'json',
-			contentType : 'application/json; charset=utf-8',
-			success : function(data){
-				alert("삭제성공")	
-				window.location.href="/events_board";
-			}
-		})
-	})
-</script>
+<script type="text/javascript" th:src="@{/js/board_view.js}"></script>
 </html>	

@@ -46,7 +46,5 @@ private final BoardMapper boardMapper;
 	public List<String> selectSub() {
 		return boardMapper.selectSub();
 	}
-	public BoardVO insertCheck(int idx) {
-		return boardMapper.insertCheck(idx);
-	}
+
 }

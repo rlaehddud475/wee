@@ -1,5 +1,8 @@
 package com.korea.test.service;
 
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.korea.test.dao.ReservationDAO;
@@ -17,4 +20,9 @@ public class ReservationServiceImpl implements ReservationService{
 	public int res_insert(ReservationVO vo) {
 		return reservationDAO.res_insert(vo);
 	}
+	  @Override
+	    public List<String> findReservedSeatsByDate(String date) {
+	        return reservationDAO.findReservedSeatsByDate(date);
+	    }
+
 }

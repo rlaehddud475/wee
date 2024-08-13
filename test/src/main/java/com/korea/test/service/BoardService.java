@@ -24,6 +24,6 @@ public interface BoardService {
 	
 
 	public List<String> selectSub();
-	public BoardVO insertCheck(int idx);
+
 
 }

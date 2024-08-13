@@ -3,95 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link th:href="@{/css/insert_form.css}" rel="stylesheet" />
 </head>
-<style>
-*{
-		background :  #232323;
-		color: white; 
-	}
-	a{
-		text-decoration : none;
-	}
-	
-	table{
-		border-collapse: collapse;
-		color: white;
-	}
-	button {
-	background-color: #565656;
-	color: white;
-}
-</style>
 <body>
 	<form name="f" th:action="@{/insert}" th:object="${vo}" method="POST">
 		<input type="hidden" id="page" th:value="${param.page}">
 		<table border="1">
 			<tr>
 				<th>제목</th>
-				<td><input th:field="*{subject}"></td>
+				<td><input id="subject"  autocomplete="off"></td>
 			</tr>
 			<tr>
 				<th>작성자</th>
-				<td><input th:field="*{name}"></td>
+				<td><input id="name"  autocomplete="off"></td>
 			</tr>
 			<tr>
 				<th>내용</th>
-				<td><textarea th:field="*{content}" rows="10" cols="50"></textarea></td>
+				<td><textarea id="content" rows="10" cols="50"  autocomplete="off"></textarea></td>
 			</tr>
 			<tr>
 				<th>비밀번호</th>
-				<td><input th:field="*{pwd}" type="password"></td>
+				<td><input id="pwd" type="password" autocomplete="off"></td>
 			</tr>
 			<tr>
 				<td colspan="2">
-					<button id="send_check" style="cursor:pointer;">등록하기</button>
-
+					<a th:href="@{/insert}"><button id="send_check" style="cursor:pointer;">등록하기</button>
+					</a>
 				</td>
 			</tr>
 		</table>
 	</form>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script type="text/javascript">
-
-//추가버튼을 변수에 담기
-const $submitForm = $("button#send_check");
-$submitForm.on("click",function(){
-	 var formData = {
-             subject: $('#subject').val(),
-             name: $('#name').val(),
-             content: $('#content').val(),
-             pwd: $('#pwd').val()
-         };
-			
-		
-		$.ajax({
-            url: '/insert?page=' + $('#page').val(),
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(formData),
-            success: function(response) {
-                var jsonResponse = JSON.parse(response);
-                if (jsonResponse.param === 'missing') {
-                    alert('모든 필드를 입력해 주세요.');
-                    // Optionally, redirect to insert_form
-                    window.location.href = '/insert_form';
-                } else if (jsonResponse.param === 'no') {
-                    alert('입력값이 올바르지 않습니다.');
-                    // Optionally, redirect to insert_form
-                    window.location.href = '/insert_form';
-                } else if (jsonResponse.param === 'yes') {
-                    alert('등록 성공!');
-                    // Redirect or perform other actions as needed
-                    window.location.href = '/events_board'; // Example redirection
-                } else {
-                    alert('서버 오류 발생.');
-                }
-            },
-            error: function() {
-                alert('서버와의 통신 중 오류가 발생했습니다.');
-            }
-        });
-		});
-</script>
+<script type="text/javascript" th:src="@{/js/insert_form.js}"></script>
 </html>

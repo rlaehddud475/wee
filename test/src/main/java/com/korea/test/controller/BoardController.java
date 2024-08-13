@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.view.RedirectView;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -152,63 +151,60 @@ public class BoardController {
 		return "/insert_form";
 	}
 	
-		 @PostMapping("insert")
-		    @ResponseBody
-		    public String insert(@RequestBody String body, @RequestParam(name = "page", required = false, defaultValue = "1") int page) {
-		        ObjectMapper om = new ObjectMapper();
-		        Map<String, String> data;
-	
-		        // Parse JSON body
-		        try {
-		            data = om.readValue(body, new TypeReference<Map<String, String>>() {});
-		        } catch (Exception e) {
-		            e.printStackTrace(); // Log the exception
-		            return "{\"param\":\"error\"}";
-		        }
-	
-		        // Extract fields
-		        String subject = data.get("subject");
-		        String name = data.get("name");
-		        String content = data.get("content");
-		        String pwd = data.get("pwd");
-	
-		        // Validate inputs
-		        if (subject == null || subject.trim().isEmpty() ||
-		            name == null || name.trim().isEmpty() ||
-		            content == null || content.trim().isEmpty() ||
-		            pwd == null || pwd.trim().isEmpty()) {
-		            return "{\"param\":\"missing\"}"; // Respond with missing parameter error
-		        }
-	
-		        try {
-		            // Create and populate BoardVO object
-		            BoardVO newVo = new BoardVO();
-		            newVo.setSubject(subject);
-		            newVo.setName(name);
-		            newVo.setContent(content);
-		            newVo.setPwd(pwd);
-	
-		            int idx = boardService.insert(newVo); // Insert data into the database
-	
-		            // Check if the insertion was successful
-		            BoardVO insertedVo = boardService.insertCheck(idx);
-		            if (insertedVo == null ||
-		                !insertedVo.getSubject().equals(subject) ||
-		                !insertedVo.getPwd().equals(pwd) ||
-		                !insertedVo.getName().equals(name) ||
-		                !insertedVo.getContent().equals(content)) {
-		                return "{\"param\":\"no\"}"; // Insertion check failed
-		            }
-		            	
-	
-		            // Set session attribute
-		            session.setAttribute("idx", insertedVo);
-		            return "{\"param\":\"yes\"}"; // Insertion successful
-		        } catch (Exception e) {
-		            e.printStackTrace(); // Log the exception
-		            return "{\"param\":\"error\"}";
-		        }
-		    }
+	 @PostMapping("/insert")
+     @ResponseBody
+     public String insert(@RequestBody String body, @RequestParam(name = "page", required = false, defaultValue = "1") int page) {
+         ObjectMapper om = new ObjectMapper();
+         Map<String, String> data;
+
+         // JSON 바디 파싱
+         try {
+             data = om.readValue(body, new TypeReference<Map<String, String>>() {});
+         } catch (Exception e) {
+             e.printStackTrace(); // 예외 로그
+             return "{\"param\":\"error\"}";
+         }
+
+         // 필드 추출
+         String subject = data.get("subject");
+         String name = data.get("name");
+         String content = data.get("content");
+         String pwd = data.get("pwd");
+
+         // 값 로그
+         System.out.println("Received data: ");
+         System.out.println("Subject: " + subject);
+         System.out.println("Name: " + name);
+         System.out.println("Content: " + content);
+         System.out.println("Password: " + pwd);
+
+         // 입력값 검증 및 데이터베이스 저장
+         try {
+             // BoardVO 객체 생성 및 데이터 세팅
+             BoardVO newVo = new BoardVO();
+             newVo.setSubject(subject);
+             newVo.setName(name);
+             newVo.setContent(content);
+             newVo.setPwd(pwd);
+
+             // 데이터베이스에 데이터 저장 후, 올바르게 저장되었는지 검증
+             try {
+                 // 데이터베이스에 데이터 저장
+                 int res = boardService.insert(newVo);
+              
+                 if (res==0) {
+                     return "{\"param\":\"no\"}";
+                 } 
+                 return "{\"param\":\"yes\"}";
+             } catch (Exception e) {
+                 e.printStackTrace();
+                 return "{\"param\":\"error\"}";
+             }
+         } catch (Exception e) {
+             e.printStackTrace();
+             return "{\"param\":\"error\"}";
+         }
+     }
 
 
 	@PostMapping("del")

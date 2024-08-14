@@ -88,6 +88,19 @@ main {
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 	border: 2px solid #ccc;
 }
+/* 비활성화된 체크박스 스타일 */
+.custom-checkbox:disabled {
+    background-color: red; /* 비활성화된 체크박스 배경색 */
+    cursor: not-allowed; /* 비활성화된 체크박스의 커서 */
+    opacity: 0.6; /* 비활성화된 체크박스의 투명도 */
+}
+
+/* 비활성화된 체크박스에 해당하는 라벨 스타일 */
+.custom-checkbox:disabled + .checkbox-label {
+	background-color: red;
+    color: #aaa; /* 비활성화된 체크박스에 대한 라벨 텍스트 색상 */
+    cursor: none;
+}
 i {
 	margin: 0 5px 0 5px;
 }

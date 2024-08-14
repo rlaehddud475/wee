@@ -2,9 +2,7 @@ package com.korea.test.service;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
-
-import org.apache.ibatis.annotations.Param;
+import java.util.Map;
 
 import com.korea.test.vo.BoardVO;
 
@@ -23,7 +21,7 @@ public interface BoardService {
 	public int del_update(BoardVO vo);
 	
 
-	public List<String> selectSub();
+	public List<String> selectSub(Map<String, Integer> map);
 
 
 }

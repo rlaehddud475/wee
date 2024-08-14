@@ -2,6 +2,7 @@ package com.korea.test.dao;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -43,8 +44,8 @@ private final BoardMapper boardMapper;
 		return boardMapper.del_update(vo);
 	}
 	
-	public List<String> selectSub() {
-		return boardMapper.selectSub();
+	public List<String> selectSub(Map<String, Integer> map) {
+		return boardMapper.selectSub(map);
 	}
 
 }

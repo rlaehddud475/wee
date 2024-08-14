@@ -12,8 +12,10 @@
 	<select id="selectOne">
 		SELECT * FROM BOARD WHERE IDX = #{idx}
 	</select>
-	<select id="selectSub">
-		SELECT subject FROM BOARD
+	<select id="selectSub">	
+		   SELECT subject 
+    FROM BOARD 
+    WHERE ROWNUM BETWEEN #{start} AND #{end}
 	</select>
 	<update id="update_readhit">
 		UPDATE BOARD

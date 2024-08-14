@@ -10,6 +10,8 @@ import com.korea.test.vo.ReservationVO;
 public interface ReservationMapper {
 
 	int res_insert(ReservationVO vo);
+	
+	
 	List<String> findReservedSeatsByDate(String date);
 
 

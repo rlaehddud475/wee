@@ -233,5 +233,34 @@ public class BoardController {
 		return "{\"param\":\"fail\"}";
 		
 	}
-	
+	@GetMapping("getSubjects")
+	@ResponseBody
+	public Map<String, Object> getSubjects(@RequestParam(name="page", required=false, defaultValue="1") int page) {
+	    int start = (page - 1) * Common.Board.BLOCKLIST + 1;
+	    int end = start + Common.Board.BLOCKLIST - 1;
+
+	    HashMap<String, Integer> map = new HashMap<>();
+	    map.put("start", start);
+	    map.put("end", end);
+
+	    // 제목만 가져오는 서비스 메소드 호출
+	    List<String> subjects = boardService.selectSub(map);
+
+	    // 전체 게시물 수 구하기
+	    int rowTotal = boardService.getRowTotal();
+
+	    // 페이지 메뉴 생성하기
+	    String pageMenu = Paging.getPaging("events_board", 
+	                                        page, 
+	                                        rowTotal, 
+	                                        Common.Board.BLOCKLIST, 
+	                                        Common.Board.BLOCKPAGE);
+
+	    Map<String, Object> response = new HashMap<>();
+	    response.put("subjects", subjects);
+	    response.put("rowTotal", rowTotal);
+	    response.put("pageMenu", pageMenu);
+
+	    return response;
+	}
 }

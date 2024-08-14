@@ -5,8 +5,9 @@
 		insert into reservation values(res_idx.nextval, #{date}, sysdate, #{num_people}, #{camping_idx}, #{price}, #{cus_id, jdbcType=VARCHAR})	
 	</insert>
 	<select id="findReservedSeatsByDate">
-    SELECT camping_idx	
-    FROM reservation
-    WHERE  TO_CHAR(date, 'yyyy-mm-dd') = #{date}
-</select>
+         SELECT camping_idx
+        FROM reservation
+        WHERE "Date" = #{date}
+
+    </select>
 </mapper>

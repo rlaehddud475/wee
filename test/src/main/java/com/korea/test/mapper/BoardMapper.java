@@ -2,9 +2,9 @@ package com.korea.test.mapper;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import com.korea.test.vo.BoardVO;
 
@@ -23,7 +23,7 @@ public List<BoardVO> selectList(HashMap<String, Integer> map);
 	
 	public int del_update(BoardVO vo);
 	
-	public List<String> selectSub();
+	public List<String> selectSub(Map<String, Integer> map);
 
 
 	

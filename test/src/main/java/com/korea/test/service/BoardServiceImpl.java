@@ -2,6 +2,7 @@
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -47,9 +48,11 @@ public class BoardServiceImpl implements BoardService {
 		return boardDAO.del_update(vo);
 }
 
+
+
 	@Override
-	public List<String> selectSub() {
-		return boardDAO.selectSub();
+	public List<String> selectSub(Map<String, Integer> map) {
+		return boardDAO.selectSub(map);
 	}
 
 

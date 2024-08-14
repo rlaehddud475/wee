@@ -59,13 +59,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // AJAX 요청을 통해 예약된 좌석 정보를 가져옴
             $.ajax({
-                url: '/findReservedSeatsByDate',
-                method: 'POST',
-                contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify({ date: selectedDate }), // 날짜를 JSON으로 전송
+                url: '/findReservedSeatsByDate', // 서버의 실제 URL 확인
+                method: 'GET', // 요청 방법이 적절한지 확인
+                data: { date: selectedDate }, // 날짜를 쿼리 파라미터로 전송
+                dataType: 'json', // 예상하는 응답 형식 설정
                 success: function(response) {
+                    console.log('서버 응답:', response); // 응답 확인
                     // 서버 응답이 JSON 배열일 경우, 각 체크박스의 상태를 업데이트
-                    const reservedSeats = response;
+                    const reservedSeats = Array.isArray(response) ? response : [];
                     $("input[type='checkbox']").each(function() {
                         if (reservedSeats.includes(this.value)) {
                             $(this).prop('disabled', true);
@@ -105,19 +106,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // 예약하기 버튼 클릭 시 폼 제출
-    $("input[name='join']").on("click", function() {
-        $("form[name='reservation_insert']").submit();
-    });
-});
-document.getElementById('numberInput').value = 1; // 기본값을 1로 설정
-
-// 로그아웃
+    // 로그아웃
     let $logoutButton = $("div[name='logout']");
-
-   $logoutButton.on("click", function() {
-      location.href="/logout";
-   })
-   
-   
-
+    $logoutButton.on("click", function() {
+        location.href="/logout";
+    });
+});	

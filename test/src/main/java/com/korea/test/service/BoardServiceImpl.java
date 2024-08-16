@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.security.auth.Subject;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService {
+	private static final HashMap<String, Integer> map = null;
 	private final BoardDAO boardDAO;
 
 	@Override
@@ -51,7 +54,7 @@ public class BoardServiceImpl implements BoardService {
 
 
 	@Override
-	public List<String> selectSub(Map<String, Integer> map) {
+	public List<Subject> selectSub(HashMap<String, Integer> map) {
 		return boardDAO.selectSub(map);
 	}
 

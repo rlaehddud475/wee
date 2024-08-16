@@ -1,10 +1,15 @@
 package com.korea.test.controller;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.security.auth.Subject;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -73,36 +78,27 @@ public class BoardController {
 		return "/notices_board";
 	}
 	
-	@GetMapping("events_board")
-	public String events_board(Model model, @RequestParam(name="page",required=false, defaultValue="1") int page) {
-		
-		int start = (page-1) * Common.Board.BLOCKLIST+1;
-		int end = start + Common.Board.BLOCKLIST-1;
-		
-		HashMap<String, Integer> map = new HashMap<>();
-		map.put("start", start);
-		map.put("end", end);
-		
-		//페이지 번호에 따른 전체 게시글 조회
-		List<BoardVO> list = boardService.selectList(map);
-		
-		model.addAttribute("list",list);
-		
-		session.removeAttribute("show");
-		
-		//전체 게시물 수 구하기
-		int rowTotal = boardService.getRowTotal();
-		
-		//페이지 메뉴 생성하기
-		String pageMenu = Paging.getPaging("board_list", 
-											page, 
-											rowTotal, 
-											Board.BLOCKLIST, 
-											Board.BLOCKPAGE);
-		
-		model.addAttribute("pageMenu",pageMenu);
-		
-		return "/events_board";
+	@GetMapping("/events_board")
+	public String events_board(Model model, @RequestParam(name = "page", defaultValue = "1") int page) {
+	    int start = (page - 1) * Common.Board.BLOCKLIST + 1;
+	    int end = start + Common.Board.BLOCKLIST - 1;
+
+	    HashMap<String, Integer> map = new HashMap<>();
+	    map.put("start", start);
+	    map.put("end", end);
+
+	    // 페이지 번호에 따른 전체 게시글 조회
+	    List<BoardVO> list = boardService.selectList(map);
+	    model.addAttribute("list", list);
+
+	    // 전체 게시물 수 구하기
+	    int rowTotal = boardService.getRowTotal();
+
+	    // 페이지 메뉴 생성하기
+	    String pageMenu = Paging.getPaging("board_list", page, rowTotal, Common.Board.BLOCKLIST, Common.Board.BLOCKPAGE);
+	    model.addAttribute("pageMenu", pageMenu);
+
+	    return "events_board";
 	}
 	
 	@GetMapping("view")
@@ -151,61 +147,36 @@ public class BoardController {
 		return "/insert_form";
 	}
 	
-	 @PostMapping("/insert")
-     @ResponseBody
-     public String insert(@RequestBody String body, @RequestParam(name = "page", required = false, defaultValue = "1") int page) {
-         ObjectMapper om = new ObjectMapper();
-         Map<String, String> data;
+	@PostMapping("/insert")
+	@ResponseBody
+	public String insert(@RequestBody BoardVO boardVO, @RequestParam(name = "page", defaultValue = "1") int page) {
+	    // 입력값 로그
+	    System.out.println("Subject: " + boardVO.getSubject());
+	    System.out.println("Name: " + boardVO.getName());
+	    System.out.println("Content: " + boardVO.getContent());
+	    System.out.println("Password: " + boardVO.getPwd());
 
-         // JSON 바디 파싱
-         try {
-             data = om.readValue(body, new TypeReference<Map<String, String>>() {});
-         } catch (Exception e) {
-             e.printStackTrace(); // 예외 로그
-             return "{\"param\":\"error\"}";
-         }
+	    // 입력값 검증
+	    if (boardVO.getSubject() == null || boardVO.getSubject().isEmpty() ||
+	        boardVO.getName() == null || boardVO.getName().isEmpty() ||
+	        boardVO.getContent() == null || boardVO.getContent().isEmpty()) {
+	        return "{\"param\":\"missing\"}";
+	    }
 
-         // 필드 추출
-         String subject = data.get("subject");
-         String name = data.get("name");
-         String content = data.get("content");
-         String pwd = data.get("pwd");
+	    try {
+	        // 데이터베이스에 데이터 저장
+	        int res = boardService.insert(boardVO);
 
-         // 값 로그
-         System.out.println("Received data: ");
-         System.out.println("Subject: " + subject);
-         System.out.println("Name: " + name);
-         System.out.println("Content: " + content);
-         System.out.println("Password: " + pwd);
-
-         // 입력값 검증 및 데이터베이스 저장
-         try {
-             // BoardVO 객체 생성 및 데이터 세팅
-             BoardVO newVo = new BoardVO();
-             newVo.setSubject(subject);
-             newVo.setName(name);
-             newVo.setContent(content);
-             newVo.setPwd(pwd);
-
-             // 데이터베이스에 데이터 저장 후, 올바르게 저장되었는지 검증
-             try {
-                 // 데이터베이스에 데이터 저장
-                 int res = boardService.insert(newVo);
-              
-                 if (res==0) {
-                     return "{\"param\":\"no\"}";
-                 } 
-                 return "{\"param\":\"yes\"}";
-             } catch (Exception e) {
-                 e.printStackTrace();
-                 return "{\"param\":\"error\"}";
-             }
-         } catch (Exception e) {
-             e.printStackTrace();
-             return "{\"param\":\"error\"}";
-         }
-     }
-
+	        // 결과에 따라 JSON 응답 설정
+	        if (res == 0) {
+	            return "{\"param\":\"no\"}";
+	        }
+	        return "{\"param\":\"yes\"}";
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "{\"param\":\"error\"}";
+	    }
+	}
 
 	@PostMapping("del")
 	@ResponseBody
@@ -233,34 +204,35 @@ public class BoardController {
 		return "{\"param\":\"fail\"}";
 		
 	}
-	@GetMapping("getSubjects")
+	@GetMapping("/getSubjects")
 	@ResponseBody
-	public Map<String, Object> getSubjects(@RequestParam(name="page", required=false, defaultValue="1") int page) {
-	    int start = (page - 1) * Common.Board.BLOCKLIST + 1;
-	    int end = start + Common.Board.BLOCKLIST - 1;
+	public ResponseEntity<Map<String, Object>> getSubjects(@RequestParam(name = "page", required = false, defaultValue = "1") int page) {
+	    try {
+	        int start = (page - 1) * Common.Board.BLOCKLIST + 1;
+	        int end = start + Common.Board.BLOCKLIST - 1;
 
-	    HashMap<String, Integer> map = new HashMap<>();
-	    map.put("start", start);
-	    map.put("end", end);
+	        HashMap<String, Integer> map = new HashMap<>();
+	        map.put("start", start);
+	        map.put("end", end);
 
-	    // 제목만 가져오는 서비스 메소드 호출
-	    List<String> subjects = boardService.selectSub(map);
+	        // 제목만 가져오는 서비스 메소드 호출
+	        List<Subject> subjects = boardService.selectSub(map);
 
-	    // 전체 게시물 수 구하기
-	    int rowTotal = boardService.getRowTotal();
+	        Map<String, Object> response = new HashMap<>();
+	        response.put("subjects", subjects.stream()
+	                                         .map(subject -> {
+	                                             HashMap<String, Object> subjectMap = new HashMap<>();
+	                                             subjectMap.put("id", subject.getId());
+	                                             subjectMap.put("title", subject.getTitle());
+	                                             return subjectMap;
+	                                         })
+	                                         .collect(Collectors.toList()));
 
-	    // 페이지 메뉴 생성하기
-	    String pageMenu = Paging.getPaging("events_board", 
-	                                        page, 
-	                                        rowTotal, 
-	                                        Common.Board.BLOCKLIST, 
-	                                        Common.Board.BLOCKPAGE);
-
-	    Map<String, Object> response = new HashMap<>();
-	    response.put("subjects", subjects);
-	    response.put("rowTotal", rowTotal);
-	    response.put("pageMenu", pageMenu);
-
-	    return response;
+	        return ResponseEntity.ok(response);
+	    } catch (Exception e) {
+	        // 예외 발생 시 오류 로그 및 응답
+	        e.printStackTrace();
+	        return ResponseEntity.status(500).body(Collections.singletonMap("error", "Internal Server Error"));
+	    }
 	}
 }

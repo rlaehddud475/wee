@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.security.auth.Subject;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -44,7 +46,7 @@ private final BoardMapper boardMapper;
 		return boardMapper.del_update(vo);
 	}
 	
-	public List<String> selectSub(Map<String, Integer> map) {
+	public List<Subject> selectSub(HashMap<String, Integer> map) {
 		return boardMapper.selectSub(map);
 	}
 

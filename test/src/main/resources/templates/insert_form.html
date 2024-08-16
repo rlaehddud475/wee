@@ -1,39 +1,40 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<link th:href="@{/css/insert_form.css}" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <title>게시글 작성</title>
+    <link th:href="@{/css/insert_form.css}" rel="stylesheet" />
 </head>
 <body>
-	<form name="f" th:action="@{/insert}" th:object="${vo}" method="POST">
-		<input type="hidden" id="page" th:value="${param.page}">
-		<table border="1">
-			<tr>
-				<th>제목</th>
-				<td><input id="subject"  autocomplete="off"></td>
-			</tr>
-			<tr>
-				<th>작성자</th>
-				<td><input id="name"  autocomplete="off"></td>
-			</tr>
-			<tr>
-				<th>내용</th>
-				<td><textarea id="content" rows="10" cols="50"  autocomplete="off"></textarea></td>
-			</tr>
-			<tr>
-				<th>비밀번호</th>
-				<td><input id="pwd" type="password" autocomplete="off"></td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<a th:href="@{/insert}"><button id="send_check" style="cursor:pointer;">등록하기</button>
-					</a>
-				</td>
-			</tr>
-		</table>
-	</form>
+    <form id="insertForm" name="f" th:action="@{/insert}" method="post">
+        <!-- 페이지 번호 숨기기 -->
+        <input type="hidden" id="page" name="page" th:value="${param.page}">
+        
+        <table border="1">
+            <tr>
+                <th>제목</th>
+                <td><input id="subject" name="subject" autocomplete="off" type="text" required></td>
+            </tr>
+            <tr>
+                <th>작성자</th>
+                <td><input id="name" name="name" autocomplete="off" type="text" required></td>
+            </tr>
+            <tr>
+                <th>내용</th>
+                <td><textarea id="content" name="content" rows="10" cols="50" autocomplete="off" required></textarea></td>
+            </tr>
+            <tr>
+                <th>비밀번호</th>
+                <td><input id="pwd" name="pwd" type="password" autocomplete="off" required></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button id="send_check" type="submit" style="cursor:pointer;">등록하기</button>
+                </td>
+            </tr>
+        </table>
+    </form>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script type="text/javascript" th:src="@{/js/insert_form.js}"></script>
+<script type="text/javascript" src="/js/insert_form.js"></script>
 </html>

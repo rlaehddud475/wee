@@ -20,8 +20,9 @@
 
     <!-- 메인 콘텐츠 -->
     <main>
-        <input id="reservation_error" type="hidden" th:if="${errorMessage}" class="alert alert-danger" th:value="${errorMessage}" >
+        <input id="reservation_error" type="hidden" th:if="${errorMessage}" class="alert alert-danger" th:value="${errorMessage}">
         <div id="success-message" th:if="${successMessage != null}"></div>
+
         <!-- 왼쪽 중단: 로그인/회원가입 및 이벤트 게시판 -->
         <div class="left-section">
             <div class="auth-section">
@@ -40,9 +41,6 @@
                 <ul id="events-list" class="events-list">
                     <!-- AJAX로 로드된 이벤트 제목이 여기에 표시됩니다. -->
                 </ul>
-                <div id="pagination">
-                    <!-- AJAX로 로드된 페이지 네비게이션이 여기에 표시됩니다. -->
-                </div>
             </div>
         </div>
 

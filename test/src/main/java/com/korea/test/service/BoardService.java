@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.security.auth.Subject;
+
 import com.korea.test.vo.BoardVO;
 
 public interface BoardService {
@@ -21,7 +23,7 @@ public interface BoardService {
 	public int del_update(BoardVO vo);
 	
 
-	public List<String> selectSub(Map<String, Integer> map);
+	public List<Subject> selectSub(HashMap<String, Integer> map);
 
 
 }
